@@ -1,0 +1,34 @@
+unit Interfaces.Fornecedor;
+
+interface
+
+uses
+  DataSnap.DBClient;
+
+type
+  iFornecedor = interface
+    function Codigo(AValue: Integer): iFornecedor; overload;
+    function Codigo: Integer; overload;
+    function NomeFantasia(AValue: String): iFornecedor; overload;
+    function NomeFantasia: String; overload;
+    function NomeFantasia(AValue: String): iFornecedor; overload;
+    function NomeFantasia: String; overload;
+    function RazaoSocial(AValue: String): iFornecedor; overload;
+    function RazaoSocial: String; overload;
+    function Cnpj(AValue: String): iFornecedor; overload;
+    function Cnpj: String; overload;
+    function DtNascimento(AValue: TDate): iFornecedor; overload;
+    function DtNascimento: TDate; overload;
+    function Status(AValue: String): iFornecedor; overload;
+    function Status: String; overload;
+    function Criar: iFornecedor;
+    function Listar(AFilter: String;
+      var AClientDataSet: TClientDataSet): iFornecedor;
+    function Editar: iFornecedor;
+    function Deletar: iFornecedor;
+    function ValidarCnpj(var AValue: Boolean): iFornecedor;
+  end;
+
+implementation
+
+end.

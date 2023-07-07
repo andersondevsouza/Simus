@@ -1,0 +1,246 @@
+unit Model.Produto;
+
+interface
+
+uses
+  Datasnap.DBClient, Data.DB, untUtils, System.StrUtils, System.SysUtils,
+  Interfaces.Produto;
+
+type
+  TModelProduto = class(TInterfacedObject, iProduto)
+    private
+      FCodigo: Integer;
+      FDescricao: String;
+      FPrecoUnitario: String;
+      FFornecedor: Integer;
+      FStatus: String;
+      constructor Create;
+    public
+      destructor Destroy; override;
+      class function New: iProduto;
+      function Codigo(AValue: Integer): iProduto; overload;
+      function Codigo: Integer; overload;
+      function Descricao(AValue: String): iProduto; overload;
+      function Descricao: String; overload;
+      function PrecoUnitario(AValue: String): iProduto; overload;
+      function PrecoUnitario: String; overload;
+      function Fornecedor(AValue: Integer): iProduto; overload;
+      function Fornecedor: Integer; overload;
+      function Status(AValue: String): iProduto; overload;
+      function Status: String; overload;
+      function Criar: iProduto;
+      function Listar(AFilter: String;
+        var AClientDataSet: TClientDataSet): iProduto;
+      function Editar: iProduto;
+      function Deletar: iProduto;
+      function ListarFornecedores(
+        var AClientDataSet: TClientDataSet): iProduto;
+
+  end;
+
+implementation
+
+{ TModelProduto }
+
+function TModelProduto.Codigo(AValue: Integer): iProduto;
+begin
+  Result := Self;
+  FCodigo := AValue;
+end;
+
+function TModelProduto.Codigo: Integer;
+begin
+  Result := FCodigo;
+end;
+
+constructor TModelProduto.Create;
+begin
+
+end;
+
+function TModelProduto.Criar: iProduto;
+begin
+  Result := Self;
+
+  var LSql := Concat(
+    'insert into produto (descricao, preco_unitario, fornecedor_id, status) ',
+                  'values(%s, %s, %d, %s) returning id '
+  );
+  LSql := Format(LSql, [QuotedStr(descricao), precounitario, fornecedor,
+    QuotedStr(status)]);
+
+  var Qry := TUtils.MinhaQuery(LSql, False);
+  try
+    FCodigo := Qry.FieldByName('id').AsInteger;
+  finally
+    Qry.Free;
+  end;
+end;
+
+function TModelProduto.Deletar: iProduto;
+begin
+  Result := Self;
+  var LSql := 'delete from produto where id = %d';
+
+  TUtils.MinhaQuery(Format(LSql, [codigo]), True);
+end;
+
+destructor TModelProduto.Destroy;
+begin
+
+  inherited;
+end;
+
+function TModelProduto.Editar: iProduto;
+begin
+  Result := Self;
+
+  var LSql := Concat(
+    'update produto ',
+       'set descricao = %s, ',
+           'preco_unitario = %s, ',
+           'fornecedor_id = %d, ',
+           'status = %s ',
+     'where id = %d '
+  );
+  TUtils.MinhaQuery(Format(LSql, [QuotedStr(descricao),
+                                  QuotedStr(precounitario),
+                                  fornecedor,
+                                  QuotedStr(status),
+                                  codigo]
+  ), true);
+end;
+
+function TModelProduto.Fornecedor(AValue: Integer): iProduto;
+begin
+  Result := Self;
+  FFornecedor := AValue;
+end;
+
+function TModelProduto.Fornecedor: Integer;
+begin
+  Result := FFornecedor;
+end;
+
+function TModelProduto.Listar(AFilter: String;
+  var AClientDataSet: TClientDataSet): iProduto;
+begin
+  Result := Self;
+
+  AClientDataSet := TClientDataSet.Create(nil);
+  AClientDataSet.FieldDefs.Add('Codigo', ftInteger, 0);
+  AClientDataSet.FieldDefs.Add('Descricao', ftString, 50);
+  AClientDataSet.FieldDefs.Add('PrecoUnitario', ftFloat);
+  AClientDataSet.FieldDefs.Add('Fornecedor', ftInteger);
+  AClientDataSet.FieldDefs.Add('Status', ftString, 10);
+  AClientDataSet.CreateDataSet;
+
+  var SQL: String;
+  SQL := Concat(
+    'select p.id as codigo, ',
+	         'p.descricao, ',
+	         'p.preco_unitario, ',
+	         'p.fornecedor_id, ',
+	         'case when p.status = ''I'' then ',
+	   	       '''Inativo'' ',
+	         'else ',
+	  	       '''Ativo'' end as status ',
+      'from produto p ',
+     'where 1 = 1 ',
+    ifthen(TUtils.StrVazio(AFilter), '', AFilter),
+    'order by p.id'
+  );
+
+  var Qry := TUtils.MinhaQuery(SQL, false);
+  try
+    Qry.First;
+    while not Qry.Eof do begin
+      AClientDataSet.Append;
+      AClientDataSet.FieldByName('Codigo').AsInteger := Qry.FieldByName('codigo').AsInteger;
+      AClientDataSet.FieldByName('Descricao').AsString :=  Qry.FieldByName('descricao').AsString;
+      AClientDataSet.FieldByName('PrecoUnitario').AsString := Qry.FieldByName('preco_unitario').AsString;
+      AClientDataSet.FieldByName('Fornecedor').AsInteger := Qry.FieldByName('fornecedor_id').AsInteger;
+      AClientDataSet.FieldByName('Status').AsString := Qry.FieldByName('status').AsString;
+      AClientDataSet.Post;
+
+      Qry.Next;
+    end;
+  finally
+    Qry.Free;
+  end;
+end;
+
+class function TModelProduto.New: iProduto;
+begin
+   Result := Self.Create;
+end;
+
+function TModelProduto.PrecoUnitario(AValue: String): iProduto;
+begin
+  Result := Self;
+  FPrecoUnitario := AValue;
+end;
+
+function TModelProduto.PrecoUnitario: String;
+begin
+  Result := FPrecoUnitario;
+end;
+
+function TModelProduto.Descricao(AValue: String): iProduto;
+begin
+  Result := Self;
+  FDescricao := AValue;
+end;
+
+function TModelProduto.Descricao: String;
+begin
+  Result := FDescricao;
+end;
+
+function TModelProduto.Status(AValue: String): iProduto;
+begin
+  Result := Self;
+  FStatus := AValue;
+end;
+
+function TModelProduto.Status: String;
+begin
+  Result := FStatus;
+end;
+
+function TModelProduto.ListarFornecedores(
+  var AClientDataSet: TClientDataSet): iProduto;
+begin
+  Result := Self;
+
+  AClientDataSet := TClientDataSet.Create(nil);
+  AClientDataSet.FieldDefs.Add('Codigo', ftInteger, 0);
+  AClientDataSet.FieldDefs.Add('NomeFantasia', ftString, 50);
+  AClientDataSet.CreateDataSet;
+
+  var SQL: String;
+  SQL := Concat(
+    'select f.id as codigo, ',
+	         'f.nome_fantasia ',
+      'from fornecedor f ',
+     'where f.status = ''A'' ',
+    'order by f.nome_fantasia'
+  );
+
+  var Qry := TUtils.MinhaQuery(SQL, false);
+  try
+    Qry.First;
+    while not Qry.Eof do begin
+      AClientDataSet.Append;
+      AClientDataSet.FieldByName('Codigo').AsInteger := Qry.FieldByName('codigo').AsInteger;
+      AClientDataSet.FieldByName('NomeFantasia').AsString :=  Qry.FieldByName('nome_fantasia').AsString;
+      AClientDataSet.Post;
+
+      Qry.Next;
+    end;
+  finally
+    Qry.Free;
+  end;
+end;
+
+end.

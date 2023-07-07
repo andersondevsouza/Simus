@@ -1,0 +1,64 @@
+unit View.Relatorio.Vendas;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, RLReport, Data.DB, Datasnap.DBClient;
+
+type
+  TfrmRelVendas = class(TForm)
+    RLReport1: TRLReport;
+    RLBand1: TRLBand;
+    RLDraw2: TRLDraw;
+    RLLabel1: TRLLabel;
+    GrupoCliente: TRLGroup;
+    RLBand2: TRLBand;
+    RLDraw1: TRLDraw;
+    RLLabel2: TRLLabel;
+    RLDBText1: TRLDBText;
+    SubGrupoVendas: TRLGroup;
+    RLBand3: TRLBand;
+    RLDraw3: TRLDraw;
+    RLLabel3: TRLLabel;
+    RLDBText2: TRLDBText;
+    RLDBText3: TRLDBText;
+    RLLabel4: TRLLabel;
+    RLLabel5: TRLLabel;
+    RLDraw4: TRLDraw;
+    RLLabel6: TRLLabel;
+    RLLabel7: TRLLabel;
+    RLLabel8: TRLLabel;
+    RLLabel9: TRLLabel;
+    RLLabel10: TRLLabel;
+    RLBand4: TRLBand;
+    RLDraw5: TRLDraw;
+    RLDBText4: TRLDBText;
+    RLDBText5: TRLDBText;
+    RLDBText6: TRLDBText;
+    RLDBText7: TRLDBText;
+    RLDBText8: TRLDBText;
+    cdsRel: TClientDataSet;
+    dsRel: TDataSource;
+    cdsRelNome: TStringField;
+    cdsRelCodigoVenda: TIntegerField;
+    cdsRelData: TDateField;
+    cdsRelProdutoId: TIntegerField;
+    cdsRelDescricao: TStringField;
+    cdsRelUnitario: TFloatField;
+    cdsRelQuantidade: TFloatField;
+    cdsRelTotal: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmRelVendas: TfrmRelVendas;
+
+implementation
+
+{$R *.dfm}
+
+end.

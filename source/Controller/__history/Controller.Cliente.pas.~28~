@@ -1,0 +1,80 @@
+unit Controller.Cliente;
+
+interface
+
+uses
+  Model.Cliente, DataSnap.DBClient;
+
+type
+  TControllerCliente = class
+    private
+      FCodigo: Integer;
+      FNome: String;
+      FCpf: String;
+      FStatus: String;
+      FDtNascimento: TDate;
+      FModelCliente: TModelCliente;
+      constructor Create;
+    public
+      destructor Destroy; override;
+      property Codigo: Integer read FCodigo write FCodigo;
+      property Nome: String read FNome write FNome;
+      property Cpf: String read FCpf write FCpf;
+      property DtNascimento: TDate read FDtNascimento write FDtNascimento;
+      property Status: String read FStatus write FStatus;
+
+      function Criar: integer;
+      procedure Editar;
+      procedure Deletar;
+      function Listar(AFilter: String): TClientDataSet;
+  end;
+
+implementation
+
+{ TControllerCliente }
+
+constructor TControllerCliente.Create;
+begin
+end;
+
+function TControllerCliente.Criar: Integer;
+begin
+  var LModelCliente := TModelCliente.New
+    .Nome(Nome)
+    .Cpf(Cpf)
+    .DtNascimento(DtNascimento)
+    .Status(Status)
+    .Criar;
+end;
+
+procedure TControllerCliente.Deletar;
+begin
+  var LModelCliente := TModelCliente.New
+    .Codigo(Codigo)
+    .Deletar;
+end;
+
+destructor TControllerCliente.Destroy;
+begin
+  FModelCliente.Free;
+  inherited;
+end;
+
+procedure TControllerCliente.Editar;
+begin
+  var LModelCliente := TModelCliente.New
+    .Codigo(Codigo)
+    .Nome(Nome)
+    .Cpf(Cpf)
+    .DtNascimento(DtNascimento)
+    .Status(Status)
+    .Editar;
+end;
+
+function TControllerCliente.Listar(AFilter: String): TClientDataSet;
+begin
+  var LModelCliente := TModelCliente.New
+    .Listar(AFilter, Result);
+end;
+
+end.

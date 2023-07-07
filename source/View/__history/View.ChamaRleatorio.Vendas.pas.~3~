@@ -1,0 +1,35 @@
+unit View.ChamaRleatorio.Vendas;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.DBCtrls,
+  Data.DB, Datasnap.DBClient;
+
+type
+  TfrmChamaRelVendas = class(TForm)
+    Label1: TLabel;
+    dblcCliente: TDBLookupComboBox;
+    BitBtn1: TBitBtn;
+    cdsConsulta: TClientDataSet;
+    cdsConsultaCodigo: TIntegerField;
+    cdsConsultaNome: TStringField;
+    cdsConsultaCpf: TStringField;
+    cdsConsultaDtNascimento: TDateField;
+    cdsConsultaStatus: TStringField;
+    ds: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmChamaRelVendas: TfrmChamaRelVendas;
+
+implementation
+
+{$R *.dfm}
+
+end.

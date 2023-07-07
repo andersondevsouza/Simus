@@ -1,0 +1,146 @@
+object frmPadraoCadastro: TfrmPadraoCadastro
+  Left = 0
+  Top = 0
+  BorderStyle = bsSingle
+  Caption = 'Nome do Cadastro'
+  ClientHeight = 332
+  ClientWidth = 645
+  Color = clBtnFace
+  Font.Charset = ANSI_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object dbgConsulta: TDBGrid
+    AlignWithMargins = True
+    Left = 3
+    Top = 91
+    Width = 639
+    Height = 120
+    Margins.Top = 0
+    Align = alTop
+    DataSource = ds
+    TabOrder = 0
+    TitleFont.Charset = ANSI_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Segoe UI'
+    TitleFont.Style = []
+  end
+  object pnBotoes: TPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
+    Width = 639
+    Height = 41
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 1
+    ExplicitLeft = 8
+    ExplicitTop = -26
+    ExplicitWidth = 645
+    object SpeedButton1: TSpeedButton
+      AlignWithMargins = True
+      Left = 327
+      Top = 3
+      Width = 102
+      Height = 35
+      Align = alLeft
+      ExplicitLeft = 3
+    end
+    object SpeedButton2: TSpeedButton
+      AlignWithMargins = True
+      Left = 219
+      Top = 3
+      Width = 102
+      Height = 35
+      Align = alLeft
+      ExplicitLeft = 11
+      ExplicitTop = 6
+    end
+    object SpeedButton3: TSpeedButton
+      AlignWithMargins = True
+      Left = 111
+      Top = 3
+      Width = 102
+      Height = 35
+      Align = alLeft
+      ExplicitLeft = 11
+      ExplicitTop = 6
+    end
+    object SpeedButton4: TSpeedButton
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 102
+      Height = 35
+      Align = alLeft
+      ExplicitLeft = 11
+      ExplicitTop = 6
+    end
+  end
+  object pnFiltro: TPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 47
+    Width = 639
+    Height = 41
+    Margins.Top = 0
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 2
+    ExplicitLeft = 8
+    ExplicitTop = 32
+    object Label4: TLabel
+      AlignWithMargins = True
+      Left = 10
+      Top = 3
+      Width = 30
+      Height = 35
+      Margins.Left = 10
+      Align = alLeft
+      Caption = 'Filtro:'
+      Layout = tlCenter
+      ExplicitLeft = 3
+      ExplicitHeight = 13
+    end
+    object edtFiltro: TEdit
+      AlignWithMargins = True
+      Left = 46
+      Top = 9
+      Width = 590
+      Height = 23
+      Margins.Top = 9
+      Margins.Bottom = 9
+      Align = alClient
+      TabOrder = 0
+      ExplicitLeft = 256
+      ExplicitTop = 8
+      ExplicitWidth = 121
+      ExplicitHeight = 21
+    end
+  end
+  object pnCadastro: TPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 214
+    Width = 639
+    Height = 115
+    Margins.Top = 0
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 3
+    ExplicitLeft = 232
+    ExplicitTop = 160
+    ExplicitWidth = 185
+    ExplicitHeight = 41
+  end
+  object ds: TDataSource
+    Left = 416
+    Top = 80
+  end
+end

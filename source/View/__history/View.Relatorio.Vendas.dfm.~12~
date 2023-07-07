@@ -1,0 +1,113 @@
+object frmRelVendas: TfrmRelVendas
+  Left = 0
+  Top = 0
+  Caption = 'frmRelVendas'
+  ClientHeight = 602
+  ClientWidth = 854
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object RLReport1: TRLReport
+    Left = 32
+    Top = 8
+    Width = 794
+    Height = 1123
+    DataSource = dsRel
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    object RLBand1: TRLBand
+      Left = 38
+      Top = 38
+      Width = 718
+      Height = 91
+      BandType = btHeader
+      object RLDraw2: TRLDraw
+        Left = 0
+        Top = 0
+        Width = 718
+        Height = 91
+        Align = faClient
+      end
+      object RLLabel1: TRLLabel
+        Left = 176
+        Top = 30
+        Width = 365
+        Height = 30
+        Align = faCenter
+        Caption = 'RELAT'#211'RIO DE VENDAS POR CLIENTE'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -21
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+    end
+    object RLGroup1: TRLGroup
+      Left = 38
+      Top = 129
+      Width = 718
+      Height = 192
+      object RLBand2: TRLBand
+        Left = 0
+        Top = 0
+        Width = 718
+        Height = 20
+        BandType = btColumnHeader
+      end
+      object RLBand3: TRLBand
+        Left = 0
+        Top = 20
+        Width = 718
+        Height = 20
+      end
+    end
+  end
+  object cdsRel: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 360
+    Top = 368
+    object cdsRelCodigoVenda: TIntegerField
+      FieldName = 'CodigoVenda'
+    end
+    object cdsRelData: TDateField
+      FieldName = 'Data'
+    end
+    object cdsRelProdutoId: TIntegerField
+      FieldName = 'ProdutoId'
+    end
+    object cdsRelDescricao: TStringField
+      FieldName = 'Descricao'
+      Size = 50
+    end
+    object cdsRelUnitario: TFloatField
+      FieldName = 'Unitario'
+      DisplayFormat = ',#0.00'
+      EditFormat = '0.00'
+    end
+    object cdsRelQuantidade: TFloatField
+      FieldName = 'Quantidade'
+      DisplayFormat = ',#0.00'
+      EditFormat = '0.00'
+    end
+    object cdsRelTotal: TFloatField
+      FieldName = 'Total'
+      DisplayFormat = ',#0.00'
+      EditFormat = '0.00'
+    end
+  end
+  object dsRel: TDataSource
+    Left = 406
+    Top = 369
+  end
+end

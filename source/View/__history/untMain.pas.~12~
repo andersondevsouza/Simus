@@ -1,0 +1,70 @@
+unit untMain;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, IniFiles, Vcl.StdCtrls, Datasnap.DBClient,
+  Data.DB, Vcl.Grids, Vcl.DBGrids, Controller.Cliente;
+
+type
+  TfrmMain = class(TForm)
+    Button1: TButton;
+    DBGrid1: TDBGrid;
+    DataSource1: TDataSource;
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMain: TfrmMain;
+
+implementation
+
+uses
+  System.SysUtils, untDm;
+
+{$R *.dfm}
+
+procedure TfrmMain.Button1Click(Sender: TObject);
+begin
+  {var LControllerCliente := TControllerCliente.Create;
+  var Cds := TClientDataSet.Create(nil);
+  with Cds do begin
+    FieldDefs.Add('Codigo', ftInteger, 0);
+    FieldDefs.Add('Nome', ftString, 50);
+    FieldDefs.Add('Cpf', ftString, 50);
+    FieldDefs.Add('Status', ftString, 1);
+
+    CloneCursor(LControllerCliente.Listar(''), false, true);
+  end;
+
+  DataSource1.DataSet := Cds;}
+end;
+
+procedure TfrmMain.FormCreate(Sender: TObject);
+begin
+  const CAMINHO_CFG = ExtractFilePath(ParamStr(0));
+  var LArquivo := TIniFile.Create(Concat(CAMINHO_CFG,'\config.ini'));
+  var LHost := LArquivo.ReadString('Conexao', 'Host', '');
+  var LDataBase := LArquivo.ReadString('Conexao', 'DataBase', '');
+  var LUserName := LArquivo.ReadString('Conexao', 'UserName', '');
+  var LPassword := LArquivo.ReadString('Conexao', 'Password', '');
+
+  try
+    Dm.FDConnection1.Connected := False;
+    Dm.FDConnection1.Params.Values['DataBase'] := LDataBase;
+    Dm.FDConnection1.Params.Values['UserName'] := LUserName;
+    Dm.FDConnection1.Params.Values['Password'] := LPassword;
+    Dm.FDConnection1.Params.Values['Server'] := LHost;
+    Dm.FDConnection1.Connected := True;
+  except
+    raise Exception.Create('Erro de conexão. Verifique!');
+  end;
+end;
+
+end.

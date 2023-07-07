@@ -1,0 +1,250 @@
+unit Model.Fornecedor;
+
+interface
+
+uses
+  Datasnap.DBClient, Data.DB, untUtils, System.StrUtils, System.SysUtils,
+  Interfaces.Fornecedor;
+
+type
+  TModelFornecedor = class(TInterfacedObject, iFornecedor)
+    private
+      FCodigo: Integer;
+      FNomeFantasia: String;
+      FRazaoSocial: String;
+      FCnpj: String;
+      FStatus: String;
+      constructor Create;
+    public
+      destructor Destroy; override;
+      class function New: iFornecedor;
+      function Codigo(AValue: Integer): iFornecedor; overload;
+      function Codigo: Integer; overload;
+      function NomeFantasia(AValue: String): iFornecedor; overload;
+      function NomeFantasia: String; overload;
+      function RazaoSocial(AValue: String): iFornecedor; overload;
+      function RazaoSocial: String; overload;
+      function Cnpj(AValue: String): iFornecedor; overload;
+      function Cnpj: String; overload;
+      function Status(AValue: String): iFornecedor; overload;
+      function Status: String; overload;
+      function Criar: iFornecedor;
+      function Listar(AFilter: String;
+        var AClientDataSet: TClientDataSet): iFornecedor;
+      function Editar: iFornecedor;
+      function Deletar: iFornecedor;
+      function ValidarCnpj(var AValue: Boolean): iFornecedor;
+      function ValidarInativacaoFornecedor(AValue: Boolean): iFornecedor;
+  end;
+
+implementation
+
+{ TModelFornecedor }
+
+function TModelFornecedor.Codigo(AValue: Integer): iFornecedor;
+begin
+  Result := Self;
+  FCodigo := AValue;
+end;
+
+function TModelFornecedor.Codigo: Integer;
+begin
+  Result := FCodigo;
+end;
+
+function TModelFornecedor.Cnpj(AValue: String): iFornecedor;
+begin
+  Result := Self;
+  FCnpj := AValue;
+end;
+
+function TModelFornecedor.Cnpj: String;
+begin
+  Result := FCnpj;
+end;
+
+constructor TModelFornecedor.Create;
+begin
+
+end;
+
+function TModelFornecedor.Criar: iFornecedor;
+begin
+  Result := Self;
+
+  var LSql := Concat(
+    'insert into fornecedor (nome_fantasia, razao_social, cnpj, status) ',
+                  'values(%s, %s, %s, %s) returning id '
+  );
+  LSql := Format(LSql, [QuotedStr(NomeFantasia), QuotedStr(RazaoSocial),
+    QuotedStr(cnpj), QuotedStr(status)]);
+
+  var Qry := TUtils.MinhaQuery(LSql, False);
+  try
+    FCodigo := Qry.FieldByName('id').AsInteger;
+  finally
+    Qry.Free;
+  end;
+end;
+
+function TModelFornecedor.Deletar: iFornecedor;
+begin
+  Result := Self;
+  var LSql := 'delete from fornecedor where id = %d';
+
+  TUtils.MinhaQuery(Format(LSql, [codigo]), True);
+end;
+
+destructor TModelFornecedor.Destroy;
+begin
+
+  inherited;
+end;
+
+function TModelFornecedor.RazaoSocial(AValue: String): iFornecedor;
+begin
+  Result := Self;
+  FRazaoSocial := AValue;
+end;
+
+function TModelFornecedor.RazaoSocial: String;
+begin
+  Result := FRazaoSocial;
+end;
+
+function TModelFornecedor.Editar: iFornecedor;
+begin
+  Result := Self;
+  var LSql := Concat(
+    'update fornecedor ',
+       'set nome_fantasia = %s, ',
+           'razao_social = %s, ',
+           'cnpj = %s, ',
+           'status = %s ',
+     'where id = %d '
+  );
+  TUtils.MinhaQuery(Format(LSql, [QuotedStr(NomeFantasia()),
+                                  QuotedStr(RazaoSocial()),
+                                  QuotedStr(cnpj),
+                                  QuotedStr(status),
+                                  codigo]
+  ), true);
+end;
+
+function TModelFornecedor.Listar(AFilter: String;
+  var AClientDataSet: TClientDataSet): iFornecedor;
+begin
+  Result := Self;
+
+  AClientDataSet := TClientDataSet.Create(nil);
+  AClientDataSet.FieldDefs.Add('Codigo', ftInteger, 0);
+  AClientDataSet.FieldDefs.Add('NomeFantasia', ftString, 50);
+  AClientDataSet.FieldDefs.Add('RazaoSocial', ftString, 50);
+  AClientDataSet.FieldDefs.Add('Cnpj', ftString, 50);
+  AClientDataSet.FieldDefs.Add('Status', ftString, 10);
+  AClientDataSet.CreateDataSet;
+
+  var SQL: String;
+  SQL := Concat(
+    'select f.id as codigo, ',
+	         'f.nome_fantasia, ',
+           'f.razao_social, ',
+	         'f.cnpj, ',
+	         'case when f.status = ''I'' then ',
+	   	       '''Inativo'' ',
+	         'else ',
+	  	       '''Ativo'' end as Status ',
+      'from fornecedor f ',
+     'where 1 = 1 ',
+    ifthen(TUtils.StrVazio(AFilter), '', AFilter),
+    'order by f.id'
+  );
+
+  var Qry := TUtils.MinhaQuery(SQL, false);
+  try
+    Qry.First;
+    while not Qry.Eof do begin
+      AClientDataSet.Append;
+      AClientDataSet.FieldByName('Codigo').AsInteger := Qry.FieldByName('Codigo').AsInteger;
+      AClientDataSet.FieldByName('NomeFantasia').AsString :=  Qry.FieldByName('nome_fantasia').AsString;
+      AClientDataSet.FieldByName('RazaoSocial').AsString := Qry.FieldByName('razao_social').AsString;
+      AClientDataSet.FieldByName('Cnpj').AsString := Qry.FieldByName('cnpj').AsString;
+      AClientDataSet.FieldByName('Status').AsString := Qry.FieldByName('Status').AsString;
+      AClientDataSet.Post;
+
+      Qry.Next;
+    end;
+  finally
+    Qry.Free;
+  end;
+end;
+
+class function TModelFornecedor.New: iFornecedor;
+begin
+   Result := Self.Create;
+end;
+
+function TModelFornecedor.NomeFantasia(AValue: String): iFornecedor;
+begin
+  Result := Self;
+  FNomeFantasia := AValue;
+end;
+
+function TModelFornecedor.NomeFantasia: String;
+begin
+  Result := FNomeFantasia;
+end;
+
+function TModelFornecedor.Status(AValue: String): iFornecedor;
+begin
+  Result := Self;
+  FStatus := AValue;
+end;
+
+function TModelFornecedor.Status: String;
+begin
+  Result := FStatus;
+end;
+
+function TModelFornecedor.ValidarCnpj(var AValue: Boolean): iFornecedor;
+begin
+  AValue := False;
+
+  Result := Self;
+  var LSql := Concat(
+    'select count(f.*) as existe ',
+      'from fornecedor f ',
+     'where f.cnpj = %s '
+  );
+
+  var Qry := TUtils.MinhaQuery(Format(LSql, [QuotedStr(cnpj)]), False);
+  try
+    if Qry.FieldByName('existe').AsInteger > 0 then
+      AValue := True;
+  finally
+    Qry.Free;
+  end;
+end;
+
+function TModelFornecedor.ValidarInativacaoFornecedor(
+  AValue: Boolean): iFornecedor;
+begin
+
+  Result := Self;
+  AValue := True;
+
+  var LSql := Concat(
+    'select count(p.*) as existe ',
+      'from produto p ',
+     'where p.fornecedor_id = %d '
+  );
+  var LQry := TUtils.MinhaQuery(Format(LSql, [codigo]), False);
+  try
+    if LQry.FieldByName('existe').AsInteger > 0 then
+      AValue := False;
+  finally
+    LQry.Free;
+  end;
+end;
+
+end.

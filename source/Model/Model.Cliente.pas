@@ -1,0 +1,233 @@
+unit Model.Cliente;
+
+interface
+
+uses
+  Datasnap.DBClient, Data.DB, untUtils, System.StrUtils, System.SysUtils,
+  Interfaces.Cliente;
+
+type
+  TModelCliente = class(TInterfacedObject, iCliente)
+    private
+      FCodigo: Integer;
+      FNome: String;
+      FCpf: String;
+      FDtNascimento: TDate;
+      FStatus: String;
+      constructor Create;
+    public
+      destructor Destroy; override;
+      class function New: iCliente;
+      function Codigo(AValue: Integer): iCliente; overload;
+      function Codigo: Integer; overload;
+      function Nome(AValue: String): iCliente; overload;
+      function Nome: String; overload;
+      function Cpf(AValue: String): iCliente; overload;
+      function Cpf: String; overload;
+      function DtNascimento(AValue: TDate): iCliente; overload;
+      function DtNascimento: TDate; overload;
+      function Status(AValue: String): iCliente; overload;
+      function Status: String; overload;
+      function Criar: iCliente;
+      function Listar(AFilter: String;
+        var AClientDataSet: TClientDataSet): iCliente;
+      function Editar: iCliente;
+      function Deletar: iCliente;
+      function ValidarCpf(var AValue: Boolean): iCliente;
+
+  end;
+
+implementation
+
+{ TModelCliente }
+
+function TModelCliente.Codigo(AValue: Integer): iCliente;
+begin
+  Result := Self;
+  FCodigo := AValue;
+end;
+
+function TModelCliente.Codigo: Integer;
+begin
+  Result := FCodigo;
+end;
+
+function TModelCliente.Cpf(AValue: String): iCliente;
+begin
+  Result := Self;
+  FCpf := AValue;
+end;
+
+function TModelCliente.Cpf: String;
+begin
+  Result := FCpf;
+end;
+
+constructor TModelCliente.Create;
+begin
+
+end;
+
+function TModelCliente.Criar: iCliente;
+begin
+  Result := Self;
+  var LDtNascimento := FormatDateTime('yyyy-mm-dd', DtNascimento);
+
+  var LSql := Concat(
+    'insert into cliente (nome, cpf, data_nascimento, status) ',
+                  'values(%s, %s, %s, %s) returning id '
+  );
+  LSql := Format(LSql, [QuotedStr(nome), QuotedStr(cpf), QuotedStr(LDtNascimento),
+    QuotedStr(status)]);
+
+  var Qry := TUtils.MinhaQuery(LSql, False);
+  try
+    FCodigo := Qry.FieldByName('id').AsInteger;
+  finally
+    Qry.Free;
+  end;
+end;
+
+function TModelCliente.Deletar: iCliente;
+begin
+  Result := Self;
+  var LSql := 'delete from cliente where id = %d';
+
+  TUtils.MinhaQuery(Format(LSql, [codigo]), True);
+end;
+
+destructor TModelCliente.Destroy;
+begin
+
+  inherited;
+end;
+
+function TModelCliente.DtNascimento(AValue: TDate): iCliente;
+begin
+  Result := Self;
+  FDtNascimento := AValue;
+end;
+
+function TModelCliente.DtNascimento: TDate;
+begin
+  Result := FDtNascimento;
+end;
+
+function TModelCliente.Editar: iCliente;
+begin
+  Result := Self;
+  var LDtNascimento := FormatDateTime('yyyy-mm-dd', DtNascimento);
+
+  var LSql := Concat(
+    'update cliente ',
+       'set nome = %s, ',
+           'cpf = %s, ',
+           'data_nascimento = %s, ',
+           'status = %s ',
+     'where id = %d '
+  );
+  TUtils.MinhaQuery(Format(LSql, [QuotedStr(nome),
+                                  QuotedStr(cpf),
+                                  QuotedStr(LDtNascimento),
+                                  QuotedStr(status),
+                                  codigo]
+  ), true);
+end;
+
+function TModelCliente.Listar(AFilter: String;
+  var AClientDataSet: TClientDataSet): iCliente;
+begin
+  Result := Self;
+
+  AClientDataSet := TClientDataSet.Create(nil);
+  AClientDataSet.FieldDefs.Add('Codigo', ftInteger, 0);
+  AClientDataSet.FieldDefs.Add('Nome', ftString, 50);
+  AClientDataSet.FieldDefs.Add('Cpf', ftString, 50);
+  AClientDataSet.FieldDefs.Add('DtNascimento', ftDate);
+  AClientDataSet.FieldDefs.Add('Status', ftString, 10);
+  AClientDataSet.CreateDataSet;
+
+  var SQL: String;
+  SQL := Concat(
+    'select c.id as codigo, ',
+	         'c.nome, ',
+	         'c.cpf, ',
+	         'c.data_nascimento, ',
+	         'case when c.status = ''I'' then ',
+	   	       '''Inativo'' ',
+	         'else ',
+	  	       '''Ativo'' end as Status ',
+      'from cliente c ',
+     'where 1 = 1 ',
+    ifthen(TUtils.StrVazio(AFilter), '', AFilter),
+    'order by c.id'
+  );
+
+  var Qry := TUtils.MinhaQuery(SQL, false);
+  try
+    Qry.First;
+    while not Qry.Eof do begin
+      AClientDataSet.Append;
+      AClientDataSet.FieldByName('Codigo').AsInteger := Qry.FieldByName('Codigo').AsInteger;
+      AClientDataSet.FieldByName('Nome').AsString :=  Qry.FieldByName('Nome').AsString;
+      AClientDataSet.FieldByName('Cpf').AsString := Qry.FieldByName('Cpf').AsString;
+      AClientDataSet.FieldByName('DtNascimento').AsDateTime := Qry.FieldByName('Data_Nascimento').AsDateTime;
+      AClientDataSet.FieldByName('Status').AsString := Qry.FieldByName('Status').AsString;
+      AClientDataSet.Post;
+
+      Qry.Next;
+    end;
+  finally
+    Qry.Free;
+  end;
+end;
+
+class function TModelCliente.New: iCliente;
+begin
+   Result := Self.Create;
+end;
+
+function TModelCliente.Nome(AValue: String): iCliente;
+begin
+  Result := Self;
+  FNome := AValue;
+end;
+
+function TModelCliente.Nome: String;
+begin
+  Result := FNome;
+end;
+
+function TModelCliente.Status(AValue: String): iCliente;
+begin
+  Result := Self;
+  FStatus := AValue;
+end;
+
+function TModelCliente.Status: String;
+begin
+  Result := FStatus;
+end;
+
+function TModelCliente.ValidarCpf(var AValue: Boolean): iCliente;
+begin
+  AValue := False;
+
+  Result := Self;
+  var LSql := Concat(
+    'select count(c.*) as existe ',
+      'from cliente c ',
+     'where c.cpf = %s '
+  );
+
+  var Qry := TUtils.MinhaQuery(Format(LSql, [QuotedStr(cpf)]), False);
+  try
+    if Qry.FieldByName('existe').AsInteger > 0 then
+      AValue := True;
+
+  finally
+    Qry.Free;
+  end;
+end;
+
+end.

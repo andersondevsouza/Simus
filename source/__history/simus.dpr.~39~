@@ -1,0 +1,39 @@
+program simus;
+
+uses
+  Vcl.Forms,
+  View.Main in 'View\View.Main.pas' {frmMain},
+  untDm in 'Model\untDm.pas' {Dm: TDataModule},
+  Model.Cliente in 'Model\Model.Cliente.pas',
+  View.Padrao.Cadastro in 'View\View.Padrao.Cadastro.pas' {frmPadraoCadastro},
+  View.Cliente in 'View\View.Cliente.pas' {frmCadastroCliente},
+  Controller.Cliente in 'Controller\Controller.Cliente.pas',
+  Vcl.Themes,
+  Vcl.Styles,
+  untUtils in 'Util\untUtils.pas',
+  Interfaces.Cliente in 'Interfaces\Interfaces.Cliente.pas',
+  Interfaces.Fornecedor in 'Interfaces\Interfaces.Fornecedor.pas',
+  Model.Fornecedor in 'Model\Model.Fornecedor.pas',
+  Controller.Fornecedor in 'Controller\Controller.Fornecedor.pas',
+  View.Fornecedor in 'View\View.Fornecedor.pas' {frmCadastroFornecedor},
+  Interfaces.Produto in 'Interfaces\Interfaces.Produto.pas',
+  Model.Produto in 'Model\Model.Produto.pas',
+  Controller.Produto in 'Controller\Controller.Produto.pas',
+  View.Produto in 'View\View.Produto.pas' {frmCadastroProduto},
+  View.Venda in 'View\View.Venda.pas' {frmVenda},
+  Model.Venda in 'Model\Model.Venda.pas',
+  Interfaces.Venda in 'Interfaces\Interfaces.Venda.pas',
+  Controller.Venda in 'Controller\Controller.Venda.pas',
+  View.Relatorio.Cliente in 'View\View.Relatorio.Cliente.pas' {frmRelCliente},
+  View.Relatorio.Vendas in 'View\View.Relatorio.Vendas.pas' {frmRelVendas};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  TStyleManager.TrySetStyle('Windows10');
+  Application.CreateForm(TDm, Dm);
+  Application.CreateForm(TfrmMain, frmMain);
+  Application.Run;
+end.

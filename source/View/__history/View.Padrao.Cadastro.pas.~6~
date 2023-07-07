@@ -1,0 +1,37 @@
+unit View.Padrao.Cadastro;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.Buttons, Vcl.StdCtrls;
+
+type
+  TfrmPadraoCadastro = class(TForm)
+    dbgConsulta: TDBGrid;
+    ds: TDataSource;
+    pnBotoes: TPanel;
+    btnDeletar: TSpeedButton;
+    btnEditar: TSpeedButton;
+    btnCancelar: TSpeedButton;
+    btnAdicionar: TSpeedButton;
+    pnFiltro: TPanel;
+    pnCadastro: TPanel;
+    edtFiltro: TEdit;
+    Label4: TLabel;
+    btnSalvar: TSpeedButton;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPadraoCadastro: TfrmPadraoCadastro;
+
+implementation
+
+{$R *.dfm}
+
+end.

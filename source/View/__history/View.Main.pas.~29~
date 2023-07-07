@@ -1,0 +1,134 @@
+unit View.Main;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, IniFiles, Vcl.StdCtrls, Datasnap.DBClient,
+  Data.DB, Vcl.Grids, Vcl.DBGrids, Controller.Cliente, Vcl.Menus, View.Venda,
+  View.Relatorio.Cliente, Controller.Venda, View.Relatorio.Vendas;
+
+type
+  TfrmMain = class(TForm)
+    MainMenu1: TMainMenu;
+    Cadastros1: TMenuItem;
+    Clientes1: TMenuItem;
+    Fornecedor1: TMenuItem;
+    Produtos1: TMenuItem;
+    Vendas1: TMenuItem;
+    Vender1: TMenuItem;
+    Relatrios1: TMenuItem;
+    Clientes2: TMenuItem;
+    Vendas2: TMenuItem;
+    Button1: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure Clientes1Click(Sender: TObject);
+    procedure Fornecedor1Click(Sender: TObject);
+    procedure Produtos1Click(Sender: TObject);
+    procedure Vender1Click(Sender: TObject);
+    procedure Clientes2Click(Sender: TObject);
+    procedure Vendas2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMain: TfrmMain;
+
+implementation
+
+uses
+  System.SysUtils, untDm, View.Cliente, View.Fornecedor, View.Produto;
+
+{$R *.dfm}
+
+procedure TfrmMain.Clientes1Click(Sender: TObject);
+begin
+  frmCadastroCliente := TfrmCadastroCliente.Create(nil);
+  try
+    frmCadastroCliente.ShowModal;
+  finally
+    frmCadastroCliente.Free;
+  end;
+end;
+
+procedure TfrmMain.Clientes2Click(Sender: TObject);
+begin
+  frmRelCliente := TfrmRelCliente.Create(nil);
+  var LCliente := TControllerCliente.Create;
+  try
+    frmRelCliente.cdsRel.CloneCursor(LCliente.Listar(''), false, true);
+    frmRelCliente.RLReport1.Preview();
+  finally
+    LCliente.Free;
+    frmRelCliente.Free;
+  end;
+end;
+
+procedure TfrmMain.FormCreate(Sender: TObject);
+begin
+  const CAMINHO_CFG = ExtractFilePath(ParamStr(0));
+  var LArquivo := TIniFile.Create(Concat(CAMINHO_CFG,'\config.ini'));
+  var LHost := LArquivo.ReadString('Conexao', 'Host', '');
+  var LDataBase := LArquivo.ReadString('Conexao', 'DataBase', '');
+  var LUserName := LArquivo.ReadString('Conexao', 'UserName', '');
+  var LPassword := LArquivo.ReadString('Conexao', 'Password', '');
+
+  try
+    Dm.FDConnection1.Connected := False;
+    Dm.FDConnection1.Params.Values['DataBase'] := LDataBase;
+    Dm.FDConnection1.Params.Values['UserName'] := LUserName;
+    Dm.FDConnection1.Params.Values['Password'] := LPassword;
+    Dm.FDConnection1.Params.Values['Server'] := LHost;
+    Dm.FDConnection1.Connected := True;
+  except
+    raise Exception.Create('Erro de conexão. Verifique!');
+  end;
+end;
+
+procedure TfrmMain.Fornecedor1Click(Sender: TObject);
+begin
+  frmCadastroFornecedor := TfrmCadastroFornecedor.Create(nil);
+  try
+    frmCadastroFornecedor.ShowModal;
+  finally
+    frmCadastroFornecedor.Free;
+  end;
+end;
+
+procedure TfrmMain.Produtos1Click(Sender: TObject);
+begin
+  frmCadastroProduto := TfrmCadastroProduto.Create(nil);
+  try
+    frmCadastroProduto.ShowModal;
+  finally
+    frmCadastroProduto.Free;
+  end;
+end;
+
+procedure TfrmMain.Vendas2Click(Sender: TObject);
+begin
+  frmRelVendas := TfrmRelVendas.Create(nil);
+  var LVenda := TControllerVenda.Create;
+  try
+    frmRelVendas.cdsRel.CloneCursor(LVenda.GerarRelatorio, false, true);
+    frmRelVendas.RLReport1.Preview();
+  finally
+    LVenda.Free;
+    frmRelVendas.Free;
+  end;
+end;
+
+procedure TfrmMain.Vender1Click(Sender: TObject);
+begin
+  frmVenda := TfrmVenda.Create(nil);
+  try
+    frmVenda.ShowModal;
+  finally
+    frmVenda.Free;
+  end;
+end;
+
+end.

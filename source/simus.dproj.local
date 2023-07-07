@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2023/07/07 14:46:40.000.173,=D:\Simus\source\Unit1.pas</Transaction>
+    <Transaction>2023/07/07 14:57:07.000.404,=D:\Simus\source\Unit1.pas</Transaction>
+    <Transaction>2023/07/07 14:57:47.000.790,D:\Simus\source\Unit1.pas=D:\Simus\source\View\View.Relatorio.Cliente.pas</Transaction>
+    <Transaction>2023/07/07 14:57:47.000.790,D:\Simus\source\Unit1.dfm=D:\Simus\source\View\View.Relatorio.Cliente.dfm</Transaction>
+    <Transaction>2023/07/07 15:15:05.000.915,=D:\Simus\source\Unit1.pas</Transaction>
+    <Transaction>2023/07/07 15:15:37.000.919,D:\Simus\source\Controller\Controller.Relatorio.Cliente.pas=D:\Simus\source\Unit1.pas</Transaction>
+    <Transaction>2023/07/07 15:18:08.000.993,D:\Simus\source\Controller\Controller.Relatorio.Cliente.pas=</Transaction>
+    <Transaction>2023/07/07 15:20:44.000.426,=D:\Simus\source\Unit1.pas</Transaction>
+    <Transaction>2023/07/07 15:20:59.000.166,D:\Simus\source\View\View.Relatorio.Vendas.pas=D:\Simus\source\Unit1.pas</Transaction>
+    <Transaction>2023/07/07 15:24:51.000.835,D:\Simus\source\View\View.Relatorio.Vendas.pas=</Transaction>
+    <Transaction>2023/07/07 15:25:16.000.034,=D:\Simus\source\Unit1.pas</Transaction>
+    <Transaction>2023/07/07 15:25:45.000.110,D:\Simus\source\Unit1.dfm=D:\Simus\source\View\View.Relatorio.Vendas.dfm</Transaction>
+    <Transaction>2023/07/07 15:25:45.000.110,D:\Simus\source\Unit1.pas=D:\Simus\source\View\View.Relatorio.Vendas.pas</Transaction>
+    <Transaction>2023/07/07 16:42:33.821,=D:\Simus\source\Unit1.pas</Transaction>
+    <Transaction>2023/07/07 16:45:45.834,D:\Simus\source\View\View.ChamaRleatorio.Vendas.pas=D:\Simus\source\Unit1.pas</Transaction>
+    <Transaction>2023/07/07 16:45:45.834,D:\Simus\source\View\View.ChamaRleatorio.Vendas.dfm=D:\Simus\source\Unit1.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

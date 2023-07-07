@@ -1,0 +1,76 @@
+object frmChamaRelVendas: TfrmChamaRelVendas
+  Left = 0
+  Top = 0
+  Caption = 'Relat'#243'rio de Vendas por Cliente'
+  ClientHeight = 99
+  ClientWidth = 475
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 8
+    Top = 8
+    Width = 90
+    Height = 13
+    Caption = 'Selecione o Cliente'
+  end
+  object DBLookupComboBox1: TDBLookupComboBox
+    Left = 8
+    Top = 27
+    Width = 461
+    Height = 21
+    KeyField = 'Codigo'
+    ListField = 'Nome'
+    ListSource = ds
+    TabOrder = 0
+  end
+  object BitBtn1: TBitBtn
+    Left = 192
+    Top = 64
+    Width = 99
+    Height = 25
+    Caption = 'Imprimir'
+    TabOrder = 1
+  end
+  object cdsConsulta: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 336
+    Top = 47
+    object cdsConsultaCodigo: TIntegerField
+      DisplayLabel = 'C'#243'digo'
+      FieldName = 'Codigo'
+    end
+    object cdsConsultaNome: TStringField
+      FieldName = 'Nome'
+      Size = 50
+    end
+    object cdsConsultaCpf: TStringField
+      DisplayLabel = 'CPF'
+      FieldName = 'Cpf'
+      Size = 11
+    end
+    object cdsConsultaDtNascimento: TDateField
+      DisplayLabel = 'Dt. Nascimento'
+      FieldName = 'DtNascimento'
+      EditMask = '!99/99/0000;1;_'
+    end
+    object cdsConsultaStatus: TStringField
+      FieldName = 'Status'
+      Size = 10
+    end
+  end
+  object ds: TDataSource
+    AutoEdit = False
+    DataSet = cdsConsulta
+    Left = 367
+    Top = 47
+  end
+end
